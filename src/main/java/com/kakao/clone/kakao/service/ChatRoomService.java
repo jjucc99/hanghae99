@@ -27,7 +27,7 @@ public class ChatRoomService {
     private final ChatRepository chatRepository;
 
     @Transactional
-    public String findCharRoom(UserDto userDto) {
+    public String findChatRoom(UserDto userDto) {
         // UserDto을 통해서 유저를 찾는다.
         String username = userDto.getUsername();
 

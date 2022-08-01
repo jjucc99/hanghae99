@@ -4,8 +4,6 @@ package com.kakao.clone.kakao.controller;
 import com.kakao.clone.kakao.dto.ChatMessageDetailDTO;
 import com.kakao.clone.kakao.dto.ChatRoomDetailDTO;
 import com.kakao.clone.kakao.dto.UserDto;
-import com.kakao.clone.kakao.repository.ChatRoomRepository;
-import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.service.ChatRoomService;
 import com.kakao.clone.kakao.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,7 @@ public class ChatController {
 
     @PostMapping("/chatRoom/find")
     public String findRoomByUsername(@RequestBody UserDto userDto) {
-        String roomId = chatRoomService.findCharRoom(userDto);
+        String roomId = chatRoomService.findChatRoom(userDto);
         if (roomId.equals("")) {
             return "채팅 방이 존재하지 않습니다";
         }
