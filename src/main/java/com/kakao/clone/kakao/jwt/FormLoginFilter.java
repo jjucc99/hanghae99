@@ -47,6 +47,7 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
             // 2. 정상인지 로그인 시도를 해보는 것. authenticationManager로 로그인 시도를 하면!!
             // PrincipalDetailsService가 호출 loadUserByUsername() 함수 실행됨.
             //PrincipalDetailsService의 loadUserByUsername()함수가 실행된 후 정상이면 authentication이 리턴됨.
+
             //DB에 있는 username과 password가 일치한다.
             Authentication authentication =
                     getAuthenticationManager().authenticate(authenticationToken);
