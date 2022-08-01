@@ -1,7 +1,8 @@
 package com.kakao.clone.kakao.security;
 
 
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.Friend;
+import com.kakao.clone.kakao.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,24 +11,24 @@ import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private final Usertable usertable;
+    private final User user;
 
-    public UserDetailsImpl(Usertable usertable) {
-        this.usertable = usertable;
+    public UserDetailsImpl(User user) {
+        this.user = user;
     }
 
-    public Usertable getUsertable() {
-        return usertable;
+    public User getUser() {
+        return user;
     }
 
     @Override
     public String getPassword() {
-        return usertable.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return usertable.getUsername();
+        return user.getUsername();
     }
 
     @Override
