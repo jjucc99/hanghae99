@@ -1,6 +1,8 @@
 package com.kakao.clone.kakao.service;
 
 
+import com.kakao.clone.kakao.Exception.CustomException;
+import com.kakao.clone.kakao.Exception.ErrorCode;
 import com.kakao.clone.kakao.dto.MainloginchecknameDto;
 import com.kakao.clone.kakao.dto.LoginIdCheckDto;
 import com.kakao.clone.kakao.dto.LoginRequestDto;
@@ -54,7 +56,7 @@ public class UserService {
         // 회원 ID 중복 확인(추가부분 아이디 유효성 검사, )
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            return "중복된 id 입니다.";
+            throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
         }
       /*  Optional<User> founds = userRepository.findByNickname(nickname);
         if (founds.isPresent()) {
@@ -63,15 +65,15 @@ public class UserService {
 */
         // 회원가입 조건
         if (username.length() < 3) {
-            return "아이디를 3자 이상 입력하세요.";
+            throw new CustomException(ErrorCode.USERNAME_LEGNTH);
         } else if (!Pattern.matches(pattern, username)) {
-            return "이메일 형식으로 입력 하세요.";
+            throw new CustomException(ErrorCode.USERNAME_EMAIL);
         } else if (!password.equals(checkPassword)) {
-            return "비밀번호가 일치하지 않습니다.";
+            throw new CustomException(ErrorCode.PASSWORD_PASSWORDCHECK);
         } else if (password.length() < 4) {
-            return "비밀번호를 4자 이상 입력하세요.";
+            throw new CustomException(ErrorCode.PASSWORD_LEGNTH);
         } else if (password.contains(username)) {
-            return "비밀번호에 아이디를 포함할 수 없습니다.";
+            throw new CustomException(ErrorCode.PASSWORD_CONTAINUSERNAME);
         }
 
         // 패스워드 인코딩
@@ -101,14 +103,14 @@ public class UserService {
         String pattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}";
         Optional<User> found = userRepository.findByUsername(mainloginchecknameDto.getUsername());
         if (mainloginchecknameDto.getUsername().length() < 3) {
-            return "아이디를 3자 이상 입력하세요.";
+            throw new CustomException(ErrorCode.USERNAME_LEGNTH);
         }
         else if (!Pattern.matches(pattern, mainloginchecknameDto.getUsername())) {
-            return "이메일 형식으로 입력 하세요.";
+            throw new CustomException(ErrorCode.USERNAME_EMAIL);
         }
         else {
             if (found.isPresent()) {
-                return "중복된 아이디 입니다.";
+                throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
             } else {
                 return "사용 할 수 있는 아이디 입니다.";
             }
@@ -119,7 +121,7 @@ public class UserService {
     public String userNicNameCheck(LoginIdCheckDto loginIdCheckDto) {
         Optional<User> found = userRepository.findByNickname(loginIdCheckDto.getNickname());
         if (found.isPresent()) {
-            return "중복된 닉네임 입니다.";
+            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
         }else{
             return "사용 할 수 있는 닉네임 입니다.";
         }
