@@ -30,7 +30,8 @@ public class ChatRoom {
     @Column
     private String participants;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
     private User user;
 
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
