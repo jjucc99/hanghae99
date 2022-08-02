@@ -6,7 +6,7 @@ import com.kakao.clone.kakao.dto.ChatRoomDetailDTO;
 import com.kakao.clone.kakao.dto.UserDto;
 import com.kakao.clone.kakao.model.ChatMessage;
 import com.kakao.clone.kakao.model.ChatRoom;
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.ChatRepository;
 import com.kakao.clone.kakao.repository.ChatRoomRepository;
 import com.kakao.clone.kakao.repository.UserRepository;
@@ -32,7 +32,7 @@ public class ChatRoomService {
         String username = userDto.getUsername();
 
         // 유저가 존재하는 지 검증한다.
-        Usertable user = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
         // 채팅방이 존재하는 지 검증한다.
@@ -49,14 +49,14 @@ public class ChatRoomService {
         // 유저를 위한 채팅룸
         ChatRoomDTO UserChatRoomDTO = new ChatRoomDTO(roomId, userDto.getParticipants(), userDto.getRoomName());
         ChatRoom UserRoom = new ChatRoom(UserChatRoomDTO);
-        Usertable user = userRepository.findByUsername(userDto.getUsername())
+        User user = userRepository.findByUsername(userDto.getUsername())
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
         UserRoom.setChatRoom(user);
 
         //초대한 친구를 위한 채팅룸
         ChatRoomDTO ParticipantsChatRoomDTO = new ChatRoomDTO(roomId, userDto.getUsername(), userDto.getRoomName());
         ChatRoom ParticipantsRoom = new ChatRoom(ParticipantsChatRoomDTO);
-        Usertable participants = userRepository.findByUsername(userDto.getParticipants())
+        User participants = userRepository.findByUsername(userDto.getParticipants())
                 .orElseThrow(() -> new RuntimeException("친구를 찾을 수 없습니다"));
         ParticipantsRoom.setUser(participants);
 

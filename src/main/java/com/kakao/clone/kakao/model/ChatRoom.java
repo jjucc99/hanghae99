@@ -1,6 +1,7 @@
 package com.kakao.clone.kakao.model;
 
 
+
 import com.kakao.clone.kakao.dto.ChatRoomDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,7 @@ public class ChatRoom {
     private String participants;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Usertable user;
+    private User user;
 
     @OneToMany(mappedBy = "chatRoom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ChatMessage> chatMessageList = new ArrayList<>();
@@ -41,9 +42,9 @@ public class ChatRoom {
         this.participants = chatRoomDTO.getParticipants();
     }
 
-    public void setChatRoom(Usertable user) {
+    public void setChatRoom(User user) {
         this.user = user;
-        user.getChatRoomList().add(this);
+    //    user.getChatRoomList().add(this);
     }
 
 //    public static ChatRoom toChatRoomEntity(String roomName, String roomId){

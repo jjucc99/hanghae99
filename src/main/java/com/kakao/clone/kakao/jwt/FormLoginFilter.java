@@ -3,7 +3,7 @@ package com.kakao.clone.kakao.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,12 +37,12 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         try {
             ObjectMapper om = new ObjectMapper();
-            Usertable usertable = om.readValue(request.getInputStream(), Usertable.class); //유저정보 담기
-            System.out.println(usertable);
+            User user = om.readValue(request.getInputStream(), User.class); //유저정보 담기
+            System.out.println(user);
             System.out.println("==============================================================");
 
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(usertable.getUsername(), usertable.getPassword());
+                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
             // 2. 정상인지 로그인 시도를 해보는 것. authenticationManager로 로그인 시도를 하면!!
             // PrincipalDetailsService가 호출 loadUserByUsername() 함수 실행됨.
@@ -71,7 +71,7 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         String jwtToken = JWT.create()
                 .withSubject("cos토큰")
                 .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
-                .withClaim("username", userDetails.getUsertable().getUsername())
+                .withClaim("username", userDetails.getUser().getUsername())
                 .sign(Algorithm.HMAC512("cos"));
 
         response.addHeader("Authorization", jwtToken);
