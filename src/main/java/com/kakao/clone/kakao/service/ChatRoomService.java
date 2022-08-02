@@ -39,7 +39,7 @@ public class ChatRoomService {
 
         // 채팅방이 존재하는 지 검증한다.
         ChatRoom chatRoom = chatRoomRepository
-                .findByUser_UsernameAndAndParticipants(userDto.getUsername(), userDto.getParticipants())
+                .findByUser_UsernameAndAndParticipants(userDetails.getUser().getUsername(), userDto.getParticipants())
                 .orElseThrow(() -> new RuntimeException("채팅 방을 찾을 수 없습니다"));
 
         // 모든 검증에서 통과하면 룸 ID를 리턴한다.
@@ -71,12 +71,12 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public List<ChatRoomDetailDTO> findAllChatRoom(UserDto userDto) {
+    public List<ChatRoomDetailDTO> findAllChatRoom(UserDto userDto,@AuthenticationPrincipal UserDetailsImpl userDetails ) {
         // Dto를 넣기 위한 리스트
         List<ChatRoomDetailDTO> chatRoomDetailDTOS = new ArrayList<>();
 
         // 채팅 방을 전부 찾는다.
-        List<ChatRoom> roomList = chatRoomRepository.findAllByUser_Username(userDto.getUsername());
+        List<ChatRoom> roomList = chatRoomRepository.findAllByUser_Username(userDetails.getUser().getUsername());
 
         // 채팅방 들을 Dto 에 넣어서 보관한다.
         for (ChatRoom chatRoom : roomList) {

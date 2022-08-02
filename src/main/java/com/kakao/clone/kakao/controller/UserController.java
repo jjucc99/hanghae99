@@ -43,7 +43,8 @@ public class UserController {
         return userService.userIdCheck(mainloginchecknameDto);
 
     }
-        //로그인 유저 정보
+
+    //로그인 유저 정보
     @GetMapping("user/login/auth")
     public User userDetails(@AuthenticationPrincipal UserDetailsImpl userDetails) {
        return userService.userInfo(userDetails);

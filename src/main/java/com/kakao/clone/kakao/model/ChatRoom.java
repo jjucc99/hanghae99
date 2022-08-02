@@ -45,13 +45,13 @@ public class ChatRoom {
 
     public void setChatRoom(User user) {
         this.user = user;
-    //    user.getChatRoomList().add(this);
+       user.getChatRoomList().add(this);
     }
 
-//    public static ChatRoom toChatRoomEntity(String roomName, String roomId){
-//        ChatRoom chatRoom = new ChatRoom();
-//        chatRoom.setRoomName(roomName);
-//        chatRoom.setRoomId(roomId);
-//        return chatRoom;
-//    }
+    public static ChatRoom toChatRoomEntity(String roomName, String roomId){
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setRoomName(roomName);
+        chatRoom.setRoomId(roomId);
+       return chatRoom;
+    }
 }

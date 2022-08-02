@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
 
+    COMPLETED_OK(HttpStatus.OK,"수행 완료."),
     USERNAME_LEGNTH(HttpStatus.CONFLICT, "ID를 4자이상으로 만들어주세요."),
     USERNAME_EMAIL(HttpStatus.CONFLICT, "ID를 이메일 형식으로 만들어주세요."),
     PASSWORD_CONTAINUSERNAME(HttpStatus.BAD_REQUEST, "패스워드에 아이디가 들어갈 수 없습니다."),
@@ -31,7 +32,7 @@ public enum ErrorCode {
     /*FRIEND 관련 에러코드*/
     /*유저 이름이 같을 때 보내는 코드*/
     FRIENDNAME_OVERLAP(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "이미 친구로 등록 하였습니다."),
-
+    SELF_REGISTRATION(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "자기자신을 등록 할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;
