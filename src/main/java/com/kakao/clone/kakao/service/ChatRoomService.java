@@ -41,6 +41,16 @@ public class ChatRoomService {
     @Transactional
     public String createChatRoom(ChatDto chatDto, UserDetailsImpl userDetails) {
         String roomId = UUID.randomUUID().toString();
+
+        // 채팅방이 존재하는 지 검증한다.
+        boolean isPresent = chatRoomRepository
+                .findByUser_UsernameAndAndParticipants(userDetails.getUsername(), chatDto.getParticipants())
+                .isPresent();
+
+        if (isPresent) {
+            throw new RuntimeException("이미 존재하는 채팅방입니다.");
+        }
+
         // 유저를 위한 채팅룸
         ChatRoomDTO UserChatRoomDTO = new ChatRoomDTO(roomId, chatDto.getParticipants(), chatDto.getRoomName());
         ChatRoom UserRoom = new ChatRoom(UserChatRoomDTO);
