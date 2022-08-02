@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignupRequestDto {
     private String username;
-    private String name;
+    private String realname;
     private String nickname;
     private String password;
     private String checkPassword;
     private String profileImage;
     private String encodeUserName;
+    private Boolean checkUsername;
 }

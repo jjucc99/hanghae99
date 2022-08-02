@@ -22,7 +22,7 @@ public class ChatController {
     @PostMapping("/chatRoom/find")
     public String findRoomByUsername(@RequestBody UserDto userDto,
                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String roomId = chatRoomService.findChatRoom(userDto);
+        String roomId = chatRoomService.findChatRoom(userDto,userDetails);
         if (roomId.equals("")) {
             return "채팅 방이 존재하지 않습니다";
         }
@@ -32,7 +32,7 @@ public class ChatController {
     @PostMapping("/chatRoom/create")
     public String createChatRoom(@RequestBody UserDto userDto,
                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String roomId = chatRoomService.createChatRoom(userDto);
+        String roomId = chatRoomService.createChatRoom(userDto,userDetails);
         if (roomId.equals("")) {
             return "채팅 방을 생성하지 못했습니다.";
         }
@@ -40,9 +40,7 @@ public class ChatController {
     }
 
     @PostMapping("/chatRoom/findAll")
-    public List<ChatRoomDetailDTO> findAllRoom(@RequestBody UserDto userDto,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails
-                                               ) {
+    public List<ChatRoomDetailDTO> findAllRoom(@RequestBody UserDto userDto) {
         List<ChatRoomDetailDTO> chatRooms = chatRoomService.findAllChatRoom(userDto);
 //        if (chatRoom.size() == 0) {
 //            throw new IllegalArgumentException("채팅 방이 존재하지 않습니다");
@@ -51,8 +49,7 @@ public class ChatController {
     }
 
     @GetMapping("/chatRoom/{roomId}")
-    public List<ChatMessageDetailDTO> findChats(@PathVariable("roomId") String roomId,
-                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<ChatMessageDetailDTO> findChats(@PathVariable("roomId") String roomId) {
         List<ChatMessageDetailDTO> chats = chatRoomService.findChat(roomId);
         //        if (chats.size() == 0) {
 //            throw new IllegalArgumentException("채팅 방이 존재하지 않습니다");
