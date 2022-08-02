@@ -1,6 +1,7 @@
 package com.kakao.clone.kakao.service;
 
 import com.kakao.clone.kakao.dto.*;
+import com.kakao.clone.kakao.model.ChatRoom;
 import com.kakao.clone.kakao.model.Friend;
 import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
@@ -24,15 +25,16 @@ public class FriendService {
         FriendListDto userDto = new FriendListDto(userDetails.getUser());
 
         //친구 목록 추출
-        List<Friend> friends = userDetails.getUser().getFriends();
+        List<User> userFriendGroup = userRepository.findByUsernameWithFriendUsingFetchJoin(userDetails.getUsername());
+        List<User> userChatRoomGroup = userRepository.findByUsernameWithChatRoomUsingFetchJoin(userDetails.getUsername());
 
 
         List<FriendListDto> friendList = null;
         FriendResponseDto friendResponseDto;
-        if (friends != null) {
+        if (userFriendGroup != null) {
             friendList = new ArrayList<>();
-            for (Friend temp : friends) {
-                FriendListDto friendListTemp = new FriendListDto(temp.getUser());
+            for (User temp : userFriendGroup) {
+                FriendListDto friendListTemp = new FriendListDto(temp);
                 friendList.add(friendListTemp);
             }
 
@@ -46,29 +48,48 @@ public class FriendService {
 
 
     @Transactional
-    public UserReturnDto friendNew(FriendNewRequertDto friendNewRequertDto, UserDetailsImpl userDetails){
+    public String friendNew(FriendNewRequertDto friendNewRequertDto, UserDetailsImpl userDetails){
 
         //등록할 친구의 정보
-        User friendTemp= userRepository.findByUsername(friendNewRequertDto.getFriendname())
+        User friendTemp = userRepository.findByUsername(friendNewRequertDto.getFriendname())
                 .orElseThrow(()->new NullPointerException("값이 없음."));
-        Friend friend = new Friend(friendTemp);
+        //로그인 유저 정보.
+        User userTemp =  userDetails.getUser();
 
-        //로그인된 유저 정보.
-        User user = userDetails.getUser();
-        //로그인 된 사람의 친구 정보
-        List<Friend> userFriendGroup =  user.getFriends();
 
-        //친구 임시저장.
-        userFriendGroup.add(friend);
+        // 로그인된 유저의 친구 정보
+        List<User> userFriendGroup = userRepository.findByUsernameWithFriendUsingFetchJoin(userDetails.getUsername());
+        List<User> userChatRoomGroup = userRepository.findByUsernameWithChatRoomUsingFetchJoin(userDetails.getUsername());
 
-        user.setFriends(userFriendGroup);
+        //친구 정보 추가.
+        userFriendGroup.add(friendTemp);
 
-        //data 저장
+        //Friend 재배치.
+        List<Friend> friendsInfo = new ArrayList<>();
+        Friend temp = new Friend(friendTemp);
+        friendsInfo.add(temp);
+        /*  List<Friend> friendsInfo = new ArrayList<>();
+        for(User user : userFriendGroup)
+        {
+            Friend temp = new Friend(user);
+            friendsInfo.add(temp);
+        }
+*/
+        UserReturnDto returnDtoDto = new UserReturnDto(userTemp,friendsInfo);
+        User user = new User(returnDtoDto);
         userRepository.save(user);
 
-        userDetails = new UserDetailsImpl(user);
-        UserReturnDto returnDtoDto = new UserReturnDto(user);
-        return returnDtoDto;
+      //  Friend friend = new Friend(friendTemp);
+
+//        //친구 임시저장.
+//        userFriendGroup.add(friend);
+//        user.setFriends(userFriendGroup);
+//
+//        //data 저장
+//        userRepository.save(user);
+//
+//        return returnDtoDto;
+        return "유저 등록 성공";
     }
 
 

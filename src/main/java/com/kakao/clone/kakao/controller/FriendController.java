@@ -31,7 +31,7 @@ public class FriendController {
 
 
     @PostMapping("/api/friend/new")
-    public UserReturnDto friendNew(@RequestBody FriendNewRequertDto friendNewRequertDto,
+    public String friendNew(@RequestBody FriendNewRequertDto friendNewRequertDto,
                                    @AuthenticationPrincipal UserDetailsImpl userDetails)
     {
         return FriendService.friendNew(friendNewRequertDto,userDetails);

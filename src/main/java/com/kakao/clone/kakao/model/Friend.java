@@ -16,8 +16,7 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "users_id")
+    @ManyToOne( fetch = FetchType.LAZY)
     private User user;
 
     public Friend(User user) {

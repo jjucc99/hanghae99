@@ -1,6 +1,8 @@
 package com.kakao.clone.kakao.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kakao.clone.kakao.dto.UserReturnDto;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -33,8 +35,8 @@ public class User {
     @Column(nullable = false)
     private String realname;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)//mappedBy 연관관계의 주인이 아니다(나는 FK가 아니에요) DB에 컬럼 만들지 마세요.
-    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)//mappedBy 연관관계의 주인이 아니다(나는 FK가 아니에요) DB에 컬럼 만들지 마세요.
+    @Builder.Default
     private List<Friend> friends = new ArrayList<>();
 
     @Column
@@ -46,9 +48,9 @@ public class User {
     @Column(length = 65535)
     private String profileBgImage;
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL)
-    @JsonIgnoreProperties({"user"})
-    private List<ChatRoom> chatRoomList;
+    @OneToMany(mappedBy = "user" , fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChatRoom> chatRoomList = new ArrayList<>();
 
     public User(String username, String password,
                 String nickname, String encodeUserName, String realname, String profileImage) {
@@ -65,14 +67,17 @@ public class User {
         this.nickname = usernickname;
     }
 
-    public User(String username,     String password,
-                String nickname,     String encodeUserName,String realname,
-                String profileImage, List<ChatRoom> chatRoomList, List<Friend> friends) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.encodeUserName = encodeUserName;
-        this.realname = realname;
-        this.profileImage = profileImage;
+    public User(UserReturnDto userReturnDto)
+    {
+        this.id = userReturnDto.getId();
+        this.username = userReturnDto.getUsername();
+        this.password = userReturnDto.getPassword();
+        this.nickname = userReturnDto.getNickname();
+        this.encodeUserName = userReturnDto.getEncodeUserName();
+        this.userStatus = userReturnDto.getUserStatus();
+        this.profileImage = userReturnDto.getProfileImage();
+        this.profileBgImage = userReturnDto.getProfileBgImage();
+        this.realname = userReturnDto.getRealname();
+        this.friends = userReturnDto.getFriends();
     }
 }
