@@ -41,6 +41,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.7'
 // https://mvnrepository.com/artifact/com.auth0/java-jwt
 	implementation group: 'com.auth0', name: 'java-jwt', version: '3.16.0'
+	//web_socket_라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 }
 
 tasks.named('test') {

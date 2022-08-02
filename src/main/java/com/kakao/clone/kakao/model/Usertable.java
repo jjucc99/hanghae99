@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -39,7 +41,8 @@ public class Usertable {
     @Column
     private String profileBgImage;
 
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ChatRoom> chatRoomList = new ArrayList<>();
 
     public Usertable(String username, String password, String nickname,String encodeUserName) {
         this.username = username;
