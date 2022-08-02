@@ -26,11 +26,16 @@ public enum ErrorCode {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_USERNAME(HttpStatus.CONFLICT, "중복된 사용자명이 존재합니다"),
     /*유저의 이름을 4자이상으로 만들어주세요 */
+<<<<<<< HEAD
     DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임이 존재합니다"),
 
     /*FRIEND 관련 에러코드*/
     /*유저 이름이 같을 때 보내는 코드*/
     FRIENDNAME_OVERLAP(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "이미 친구로 등록 하였습니다."),
+=======
+    DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임이 존재합니다");
+
+>>>>>>> origin/test220802
 
 
     private final HttpStatus httpStatus;
