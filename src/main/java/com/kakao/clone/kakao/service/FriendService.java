@@ -8,6 +8,7 @@ import com.kakao.clone.kakao.repository.UserRepository;
 
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +24,9 @@ public class FriendService {
     public FriendResponseDto showFriendList(UserDetailsImpl userDetails) {
         //유저정보 추출
         FriendListDto userDto = new FriendListDto(userDetails.getUser());
-
         //친구 목록 추출
         List<User> userFriendGroup = userRepository.findByUsernameWithFriendUsingFetchJoin(userDetails.getUsername());
         List<User> userChatRoomGroup = userRepository.findByUsernameWithChatRoomUsingFetchJoin(userDetails.getUsername());
-
 
         List<FriendListDto> friendList = null;
         FriendResponseDto friendResponseDto;
@@ -57,11 +56,20 @@ public class FriendService {
         User userTemp =  userDetails.getUser();
 
 
+
         // 로그인된 유저의 친구 정보
         List<User> userFriendGroup = userRepository.findByUsernameWithFriendUsingFetchJoin(userDetails.getUsername());
         List<User> userChatRoomGroup = userRepository.findByUsernameWithChatRoomUsingFetchJoin(userDetails.getUsername());
 
-        //친구 정보 추가.
+        for(User overlapUser : userFriendGroup) {
+            if (overlapUser.getUsername().equals(friendNewRequertDto.getFriendname()))
+                return null;
+        }
+
+
+
+
+            //친구 정보 추가.
         userFriendGroup.add(friendTemp);
 
         //Friend 재배치.
