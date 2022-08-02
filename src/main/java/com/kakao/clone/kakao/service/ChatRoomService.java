@@ -1,14 +1,18 @@
 package com.kakao.clone.kakao.service;
 
-import com.kakao.clone.kakao.dto.*;
+import com.kakao.clone.kakao.dto.ChatMessageDetailDTO;
+import com.kakao.clone.kakao.dto.ChatRoomDTO;
+import com.kakao.clone.kakao.dto.ChatRoomDetailDTO;
+import com.kakao.clone.kakao.dto.UserDto;
 import com.kakao.clone.kakao.model.ChatMessage;
 import com.kakao.clone.kakao.model.ChatRoom;
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.ChatRepository;
 import com.kakao.clone.kakao.repository.ChatRoomRepository;
 import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,33 +29,36 @@ public class ChatRoomService {
     private final ChatRepository chatRepository;
 
     @Transactional
-    public String findChatRoom(ChatDto chatDto, UserDetailsImpl userDetails) {
+    public String findChatRoom(UserDto userDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // UserDto을 통해서 유저를 찾는다.
+        String username = userDetails.getUser().getUsername();
+
         // 유저가 존재하는 지 검증한다.
-        Usertable user = userRepository.findByUsername(userDetails.getUsername())
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
 
         // 채팅방이 존재하는 지 검증한다.
         ChatRoom chatRoom = chatRoomRepository
-                .findByUser_UsernameAndAndParticipants(userDetails.getUsername(), chatDto.getParticipants())
+                .findByUser_UsernameAndAndParticipants(userDto.getUsername(), userDto.getParticipants())
                 .orElseThrow(() -> new RuntimeException("채팅 방을 찾을 수 없습니다"));
 
         // 모든 검증에서 통과하면 룸 ID를 리턴한다.
         return chatRoom.getRoomId();
     }
     @Transactional
-    public String createChatRoom(ChatDto chatDto, UserDetailsImpl userDetails) {
+    public String createChatRoom(UserDto userDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String roomId = UUID.randomUUID().toString();
         // 유저를 위한 채팅룸
-        ChatRoomDTO UserChatRoomDTO = new ChatRoomDTO(roomId, chatDto.getParticipants(), chatDto.getRoomName());
+        ChatRoomDTO UserChatRoomDTO = new ChatRoomDTO(roomId, userDto.getParticipants(), userDto.getRoomName());
         ChatRoom UserRoom = new ChatRoom(UserChatRoomDTO);
-        Usertable user = userRepository.findByUsername(userDetails.getUsername())
+        User user = userRepository.findByUsername(userDetails.getUser().getUsername())
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다"));
         UserRoom.setChatRoom(user);
 
         //초대한 친구를 위한 채팅룸
-        ChatRoomDTO ParticipantsChatRoomDTO = new ChatRoomDTO(roomId, userDetails.getUsername(), chatDto.getRoomName());
+        ChatRoomDTO ParticipantsChatRoomDTO = new ChatRoomDTO(roomId, userDetails.getUser().getUsername(), userDto.getRoomName());
         ChatRoom ParticipantsRoom = new ChatRoom(ParticipantsChatRoomDTO);
-        Usertable participants = userRepository.findByUsername(chatDto.getParticipants())
+        User participants = userRepository.findByUsername(userDto.getParticipants())
                 .orElseThrow(() -> new RuntimeException("친구를 찾을 수 없습니다"));
         ParticipantsRoom.setUser(participants);
 
@@ -64,12 +71,12 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public List<ChatRoomDetailDTO> findAllChatRoom(ChatDto chatDto, UserDetailsImpl userDetails) {
+    public List<ChatRoomDetailDTO> findAllChatRoom(UserDto userDto) {
         // Dto를 넣기 위한 리스트
         List<ChatRoomDetailDTO> chatRoomDetailDTOS = new ArrayList<>();
 
         // 채팅 방을 전부 찾는다.
-        List<ChatRoom> roomList = chatRoomRepository.findAllByUser_Username(userDetails.getUsername());
+        List<ChatRoom> roomList = chatRoomRepository.findAllByUser_Username(userDto.getUsername());
 
         // 채팅방 들을 Dto 에 넣어서 보관한다.
         for (ChatRoom chatRoom : roomList) {

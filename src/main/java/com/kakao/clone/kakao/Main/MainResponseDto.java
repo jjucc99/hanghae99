@@ -1,6 +1,6 @@
 package com.kakao.clone.kakao.Main;
 
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +17,10 @@ public class MainResponseDto {
     private String content;
 
     public MainResponseDto(Long id, String title, String image, String content,
-                           Usertable Usertable_temp) {
+                           User user_temp) {
         this.id = id;
-        this.username = Usertable_temp.getUsername();
-        this.nickName = Usertable_temp.getNickname();
+        this.username = user_temp.getUsername();
+        this.nickName = user_temp.getNickname();
         this.title = title;
         this.content = content;
         this.image = image;
