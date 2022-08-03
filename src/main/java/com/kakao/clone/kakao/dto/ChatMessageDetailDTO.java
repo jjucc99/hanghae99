@@ -9,16 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatMessageDetailDTO {
-
-    private Long chatId;
-
     private String roomId;
     private String writer;
     private String message;
     public static ChatMessageDetailDTO toChatMessageDetailDTO(ChatMessage chatMessage){
         ChatMessageDetailDTO chatMessageDetailDTO = new ChatMessageDetailDTO();
 
-        chatMessageDetailDTO.setChatId(chatMessage.getId());
         chatMessageDetailDTO.setRoomId(chatMessage.getChatRoom().getRoomId());
 
         chatMessageDetailDTO.setWriter(chatMessage.getWriter());
