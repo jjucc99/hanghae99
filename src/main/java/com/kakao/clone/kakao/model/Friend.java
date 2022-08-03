@@ -17,6 +17,7 @@ public class Friend {
     private Long id;
 
     @ManyToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
     private User user;
 
     public Friend(User user) {
