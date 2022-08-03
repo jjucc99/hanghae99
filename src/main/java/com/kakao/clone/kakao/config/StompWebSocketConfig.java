@@ -2,6 +2,7 @@ package com.kakao.clone.kakao.config;
 
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -34,5 +35,11 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/sub");
         //enableStompBrokerRelay
         //SimpleBroker의 기능과 외부 Message Broker( RabbitMQ, ActiveMQ 등 )에 메세지를 전달하는 기능을 가짐
+    }
+
+    // Socket 에서 인증 절차를 만드는 중
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new FilterChannelInterceptor());
     }
 }
