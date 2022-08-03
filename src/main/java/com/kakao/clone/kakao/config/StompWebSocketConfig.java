@@ -36,11 +36,4 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         //enableStompBrokerRelay
         //SimpleBroker의 기능과 외부 Message Broker( RabbitMQ, ActiveMQ 등 )에 메세지를 전달하는 기능을 가짐
     }
-
-
-    // STOMP 인증을 위한 인터셉터
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new FilterChannelInterceptor());
-    }
 }
