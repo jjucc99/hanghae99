@@ -1,11 +1,9 @@
 package com.kakao.clone.kakao.service;
 
+
 import com.kakao.clone.kakao.Exception.CustomException;
 import com.kakao.clone.kakao.Exception.ErrorCode;
-import com.kakao.clone.kakao.dto.ChatMessageDetailDTO;
-import com.kakao.clone.kakao.dto.ChatRoomDTO;
-import com.kakao.clone.kakao.dto.ChatRoomDetailDTO;
-import com.kakao.clone.kakao.dto.UserDto;
+import com.kakao.clone.kakao.dto.*;
 import com.kakao.clone.kakao.model.ChatMessage;
 import com.kakao.clone.kakao.model.ChatRoom;
 import com.kakao.clone.kakao.model.User;
@@ -14,7 +12,6 @@ import com.kakao.clone.kakao.repository.ChatRoomRepository;
 import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +28,7 @@ public class ChatRoomService {
     private final ChatRepository chatRepository;
 
     @Transactional
-    public String findChatRoom(UserDto userDto, UserDetailsImpl userDetails) {
+    public ChatResponseDto findChatRoom(UserDto userDto, UserDetailsImpl userDetails) {
         // UserDto을 통해서 유저를 찾는다.
         String username = userDetails.getUser().getUsername();
 
@@ -45,10 +42,10 @@ public class ChatRoomService {
                 .orElseThrow(() -> new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM));
 
         // 모든 검증에서 통과하면 룸 ID를 리턴한다.
-        return chatRoom.getRoomId();
+        return new ChatResponseDto(chatRoom.getRoomId(), userDetails.getUsername());
     }
     @Transactional
-    public String createChatRoom(UserDto userDto, UserDetailsImpl userDetails) {
+    public ChatResponseDto createChatRoom(UserDto userDto, UserDetailsImpl userDetails) {
         String roomId = UUID.randomUUID().toString();
 
         // 채팅방이 존재하는 지 검증한다.
@@ -78,8 +75,10 @@ public class ChatRoomService {
         chatRoomRepository.save(UserRoom);
         chatRoomRepository.save(ParticipantsRoom);
 
-        //저장에 성공했으면 룸 ID를 리턴
-        return UserRoom.getRoomId();
+
+
+        //저장에 성공했으면 Dto을 리턴
+        return new ChatResponseDto(UserRoom.getRoomId(), userDetails.getUsername());
     }
 
     @Transactional
