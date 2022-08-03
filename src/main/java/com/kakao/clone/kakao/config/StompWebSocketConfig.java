@@ -2,7 +2,6 @@ package com.kakao.clone.kakao.config;
 
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
