@@ -32,7 +32,12 @@ public enum ErrorCode {
     /*FRIEND 관련 에러코드*/
     /*유저 이름이 같을 때 보내는 코드*/
     FRIENDNAME_OVERLAP(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "이미 친구로 등록 하였습니다."),
-    SELF_REGISTRATION(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "자기자신을 등록 할 수 없습니다.");
+    SELF_REGISTRATION(HttpStatus.NON_AUTHORITATIVE_INFORMATION, "자기자신을 등록 할 수 없습니다."),
+
+    // 채팅 방에 관한 로직
+    CAN_NOT_CREATE_ROOM(HttpStatus.BAD_REQUEST, "채팅 방을 생성할 수 없습니다"),
+    DUPLICATE_CHAT_ROOM(HttpStatus.BAD_REQUEST, "채팅 방이 이미 존재합니다");
+
 
     private final HttpStatus httpStatus;
     private final String errorMessage;
