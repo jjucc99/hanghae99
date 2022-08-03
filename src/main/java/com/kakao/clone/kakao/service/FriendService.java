@@ -1,18 +1,17 @@
 package com.kakao.clone.kakao.service;
 
+import com.kakao.clone.kakao.Exception.CustomException;
+import com.kakao.clone.kakao.Exception.ErrorCode;
 import com.kakao.clone.kakao.dto.*;
-import com.kakao.clone.kakao.model.ChatRoom;
 import com.kakao.clone.kakao.model.Friend;
 import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
 
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class FriendService {
 
 
     @Transactional
-    public String friendNew(FriendNewRequertDto friendNewRequertDto, UserDetailsImpl userDetails){
+    public CustomException friendNew(FriendNewRequertDto friendNewRequertDto, UserDetailsImpl userDetails){
 
         //등록할 친구의 정보
         User friendTemp = userRepository.findByUsername(friendNewRequertDto.getFriendname())
@@ -55,7 +54,8 @@ public class FriendService {
         //로그인 유저 정보.
         User userTemp =  userDetails.getUser();
 
-
+        if (userTemp.getUsername().equals(friendNewRequertDto.getFriendname()))
+            return new CustomException(ErrorCode.SELF_REGISTRATION);
 
         // 로그인된 유저의 친구 정보
         List<User> userFriendGroup = userRepository.findByUsernameWithFriendUsingFetchJoin(userDetails.getUsername());
@@ -63,41 +63,22 @@ public class FriendService {
 
         for(User overlapUser : userFriendGroup) {
             if (overlapUser.getUsername().equals(friendNewRequertDto.getFriendname()))
-                return null;
+                return new CustomException(ErrorCode.FRIENDNAME_OVERLAP);
         }
 
-
-
-
-            //친구 정보 추가.
+        //친구 정보 추가.
         userFriendGroup.add(friendTemp);
 
         //Friend 재배치.
         List<Friend> friendsInfo = new ArrayList<>();
         Friend temp = new Friend(friendTemp);
         friendsInfo.add(temp);
-        /*  List<Friend> friendsInfo = new ArrayList<>();
-        for(User user : userFriendGroup)
-        {
-            Friend temp = new Friend(user);
-            friendsInfo.add(temp);
-        }
-*/
+
         UserReturnDto returnDtoDto = new UserReturnDto(userTemp,friendsInfo);
         User user = new User(returnDtoDto);
         userRepository.save(user);
 
-      //  Friend friend = new Friend(friendTemp);
-
-//        //친구 임시저장.
-//        userFriendGroup.add(friend);
-//        user.setFriends(userFriendGroup);
-//
-//        //data 저장
-//        userRepository.save(user);
-//
-//        return returnDtoDto;
-        return "유저 등록 성공";
+        return new CustomException(ErrorCode.COMPLETED_OK);
     }
 
 

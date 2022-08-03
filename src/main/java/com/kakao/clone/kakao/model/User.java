@@ -36,7 +36,6 @@ public class User {
     private String realname;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)//mappedBy 연관관계의 주인이 아니다(나는 FK가 아니에요) DB에 컬럼 만들지 마세요.
-    @Builder.Default
     private List<Friend> friends = new ArrayList<>();
 
     @Column
@@ -49,7 +48,6 @@ public class User {
     private String profileBgImage;
 
     @OneToMany(mappedBy = "user" , fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @Builder.Default
     private List<ChatRoom> chatRoomList = new ArrayList<>();
 
     public User(String username, String password,
