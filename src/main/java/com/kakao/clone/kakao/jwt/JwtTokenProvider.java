@@ -1,6 +1,6 @@
 package com.kakao.clone.kakao.jwt;
 
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     // 토큰 유효시간 5분 설정 (1000L = 1초, 1000L * 60 = 1분)
-    private static final long TOKEN_VALID_TIME = 1000L * 60 * 5;
+    private static final long TOKEN_VALID_TIME = 1000L * 60 * 120;
 
     private final UserDetailsService userDetailsService;
 
@@ -54,10 +54,10 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        Usertable usertable = userRepository.findByNickname(this.getUserPk(token))
+        User user = userRepository.findByNickname(this.getUserPk(token))
                 .orElseThrow(()-> new NullPointerException("Null is username"));
 
-        UserDetailsImpl userDetails = new UserDetailsImpl(usertable);
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
       /* UserDetails userDetails =userDetailsService.loadUserByUsername();
         Member member = userRepository.findByUsername(userDetails.getUsername())

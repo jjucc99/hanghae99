@@ -1,13 +1,14 @@
 package com.kakao.clone.kakao.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatDto {
-    private String participants;
-    private String roomName;
+public class FriendNewRequertDto {
+    private String friendname;
 }
