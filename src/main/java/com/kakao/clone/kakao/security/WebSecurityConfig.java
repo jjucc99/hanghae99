@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.headers().frameOptions().disable();
+        // http.headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
                 // api 요청 접근허용

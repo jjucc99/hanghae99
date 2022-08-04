@@ -11,7 +11,6 @@ import com.kakao.clone.kakao.repository.ChatRoomRepository;
 import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
