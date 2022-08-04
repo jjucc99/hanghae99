@@ -38,7 +38,6 @@ public enum ErrorCode {
     CAN_NOT_CREATE_ROOM(HttpStatus.BAD_REQUEST, "채팅 방을 생성할 수 없습니다"),
     DUPLICATE_CHAT_ROOM(HttpStatus.BAD_REQUEST, "채팅 방이 이미 존재합니다");
 
-
     private final HttpStatus httpStatus;
     private final String errorMessage;
 

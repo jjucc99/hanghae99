@@ -1,5 +1,7 @@
 package com.kakao.clone.kakao.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,11 +18,20 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //친구 이름.
+    private String friendName;
+    private String profileImage;
+    private String userStatus;
+    private String nickname;
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private User user;
 
-    public Friend(User user) {
+    public Friend(User user, String friendName,String profileImage, String userStatus, String nickname) {
         this.user = user;
+        this.friendName = friendName;
+        this.profileImage = profileImage;
+        this.userStatus = userStatus;
+        this.nickname = nickname;
     }
 }

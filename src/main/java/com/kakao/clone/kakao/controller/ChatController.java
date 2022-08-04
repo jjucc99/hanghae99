@@ -26,18 +26,17 @@ public class ChatController {
     @PostMapping("/chatRoom/find")
     public ChatResponseDto findRoomByUsername(@RequestBody UserDto userDto,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ChatResponseDto chatRoom = chatRoomService.findChatRoom(userDto, userDetails);
-        if (chatRoom.getRoomId().equals("")) {
+        ChatResponseDto chatRoom = chatRoomService.findChatRoom(userDto,userDetails);
+        if (chatRoom.equals("")) {
             throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         }
         return chatRoom;
     }
 
-
     //채팅방 만들기
     @PostMapping("/chatRoom/create")
     public ChatResponseDto createChatRoom(@RequestBody UserDto userDto,
-                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ChatResponseDto chatRoom = chatRoomService.createChatRoom(userDto, userDetails);
         if (chatRoom.getRoomId().equals("")) {
             throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);

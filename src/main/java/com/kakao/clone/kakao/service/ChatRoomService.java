@@ -1,6 +1,5 @@
 package com.kakao.clone.kakao.service;
 
-
 import com.kakao.clone.kakao.Exception.CustomException;
 import com.kakao.clone.kakao.Exception.ErrorCode;
 import com.kakao.clone.kakao.dto.*;
@@ -96,6 +95,7 @@ public class ChatRoomService {
         return chatRoomDetailDTOS;
     }
 
+
     public List<ChatMessageDetailDTO> findChat(String roomId) {
         // 채팅을 찾는다.
         List<ChatMessage> chats = chatRepository.findAllByChatRoom_roomId(roomId);
@@ -105,7 +105,7 @@ public class ChatRoomService {
         for (ChatMessage chat : chats) {
             chatDto.add(ChatMessageDetailDTO.toChatMessageDetailDTO(chat));
         }
-        
+
         //반환
         return chatDto;
     }

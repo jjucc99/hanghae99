@@ -1,11 +1,12 @@
 package com.kakao.clone.kakao.controller;
 
 import com.kakao.clone.kakao.dto.ChatMessageSaveDTO;
-import com.kakao.clone.kakao.security.UserDetailsImpl;
 import com.kakao.clone.kakao.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -16,16 +17,18 @@ public class StompChatController {
     //Client 가 SEND 할 수 있는 경로
     //stompConfig 에서 설정한 applicationDestinationPrefixes 와 @MessageMapping 경로가 병합됨
     //"/pub/chat/enter"
-    @MessageMapping(value = "/chat/enter")
-    public void enter(ChatMessageSaveDTO message,
-                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @MessageMapping("/chat/enter")
+    public String enter(ChatMessageSaveDTO message) {
+        System.out.println("/chat/enter");
         cs.enterChatRoom(message);
+        return "나집에갈래.";
     }
 
-    @MessageMapping(value = "/chat/message")
-    public void message(ChatMessageSaveDTO message,
-                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @MessageMapping("/chat/message")
+    public String message(ChatMessageSaveDTO message) {
+        System.out.println("/chat/message");
         cs.sendChat(message);
+        return "살려줘";
     }
 
 //    @MessageMapping 을 통해 WebSocket 으로 들어오는 메세지 발행을 처리한다.

@@ -39,6 +39,7 @@ public class ChatService {
                 .orElseThrow(() ->  new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM));
         cr.save(ChatMessage.toChatEntity(message, chatRoom));
     }
+
     @Transactional
     public void sendChat(ChatMessageSaveDTO message) {
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
