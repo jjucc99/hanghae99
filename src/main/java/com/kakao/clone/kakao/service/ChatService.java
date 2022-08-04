@@ -2,6 +2,7 @@ package com.kakao.clone.kakao.service;
 
 
 
+import com.kakao.clone.kakao.dto.ChatMessageDto;
 import com.kakao.clone.kakao.dto.ChatMessageSaveDTO;
 import com.kakao.clone.kakao.model.ChatMessage;
 import com.kakao.clone.kakao.model.ChatRoom;
@@ -21,7 +22,7 @@ public class ChatService {
     private final ChatRepository cr;
     private final ChatRoomRepository crr;
     @Transactional
-    public void enterChatRoom(ChatMessageSaveDTO message) {
+    public ChatMessageDto enterChatRoom(ChatMessageSaveDTO message) {
         message.setMessage(message.getWriter() + "님이 채팅방에 참여하였습니다.");
 
         List<ChatMessage> chatList = cr.findAllByChatRoom_roomId(message.getRoomId());
@@ -36,10 +37,11 @@ public class ChatService {
         ChatRoom chatRoom = crr.findByRoomIdAndAndUser_Username(message.getRoomId(), message.getWriter())
                 .orElseThrow(() -> new RuntimeException("채팅방을 찾을 수 없습니다"));
         cr.save(ChatMessage.toChatEntity(message, chatRoom));
+        return new ChatMessageDto(message.getRoomId(), message.getWriter(), message.getMessage());
     }
 
     @Transactional
-    public void sendChat(ChatMessageSaveDTO message) {
+    public ChatMessageDto sendChat(ChatMessageSaveDTO message) {
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
 
         // DB에 채팅내용 저장
@@ -47,5 +49,6 @@ public class ChatService {
                 .orElseThrow(() -> new RuntimeException("채팅방을 찾을 수 없습니다"));
         ChatMessageSaveDTO chatMessageSaveDTO = new ChatMessageSaveDTO(message.getRoomId(),message.getWriter(), message.getMessage());
         cr.save(ChatMessage.toChatEntity(chatMessageSaveDTO,chatRoom));
+        return new ChatMessageDto(message.getRoomId(), message.getWriter(), message.getMessage())
     }
 }

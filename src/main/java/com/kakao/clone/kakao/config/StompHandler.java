@@ -2,7 +2,6 @@ package com.kakao.clone.kakao.config;
 
 import com.kakao.clone.kakao.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
