@@ -1,7 +1,10 @@
 package com.kakao.clone.kakao.controller;
 
 
+import com.kakao.clone.kakao.Exception.CustomException;
+import com.kakao.clone.kakao.Exception.ErrorCode;
 import com.kakao.clone.kakao.dto.ChatMessageDetailDTO;
+import com.kakao.clone.kakao.dto.ChatResponseDto;
 import com.kakao.clone.kakao.dto.ChatRoomDetailDTO;
 import com.kakao.clone.kakao.dto.UserDto;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
@@ -21,25 +24,24 @@ public class ChatController {
 
     //채팅방 찾기
     @PostMapping("/chatRoom/find")
-    public String findRoomByUsername(@RequestBody UserDto userDto,
-                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String roomId = chatRoomService.findChatRoom(userDto,userDetails);
-        if (roomId.equals("")) {
-            return "채팅 방이 존재하지 않습니다";
+    public ChatResponseDto findRoomByUsername(@RequestBody UserDto userDto,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ChatResponseDto chatRoom = chatRoomService.findChatRoom(userDto,userDetails);
+        if (chatRoom.equals("")) {
+            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         }
-        return roomId;
+        return chatRoom;
     }
-
 
     //채팅방 만들기
     @PostMapping("/chatRoom/create")
-    public String createChatRoom(@RequestBody UserDto userDto,
-                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String roomId = chatRoomService.createChatRoom(userDto,userDetails);
-        if (roomId.equals("")) {
-            return "채팅 방을 생성하지 못했습니다.";
+    public ChatResponseDto createChatRoom(@RequestBody UserDto userDto,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ChatResponseDto chatRoom = chatRoomService.createChatRoom(userDto, userDetails);
+        if (chatRoom.getRoomId().equals("")) {
+            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         }
-        return roomId;
+        return chatRoom;
     }
 
     //채팅방 전부찾기
@@ -48,7 +50,7 @@ public class ChatController {
                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<ChatRoomDetailDTO> chatRooms = chatRoomService.findAllChatRoom(userDto,userDetails);
         if (chatRooms.size() == 0) {
-            throw new IllegalArgumentException("채팅 방이 존재하지 않습니다");
+            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         }
         return chatRooms;
     }
@@ -58,7 +60,7 @@ public class ChatController {
     public List<ChatMessageDetailDTO> findChats(@PathVariable("roomId") String roomId) {
         List<ChatMessageDetailDTO> chats = chatRoomService.findChat(roomId);
         if (chats.size() == 0) {
-            throw new IllegalArgumentException("채팅 방이 존재하지 않습니다");
+            throw new CustomException(ErrorCode.CAN_NOT_CREATE_ROOM);
         }
         return chats;
     }
