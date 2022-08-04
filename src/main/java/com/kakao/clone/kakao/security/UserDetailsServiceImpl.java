@@ -1,7 +1,7 @@
 package com.kakao.clone.kakao.security;
 
 
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,9 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     }
 
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usertable usertable = userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
 
-        return new UserDetailsImpl(usertable);
+        return new UserDetailsImpl(user);
     }
 }

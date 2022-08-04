@@ -2,7 +2,7 @@ package com.kakao.clone.kakao.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.kakao.clone.kakao.model.Usertable;
+import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,7 +50,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         //서명이 정상적으로 됨.
         if(username != null) {
-            Usertable memberEntity = userRepository.findByUsername(username).orElseThrow(
+            User memberEntity = userRepository.findByUsername(username).orElseThrow(
                     ()-> new IllegalArgumentException("username이 없습니다.")
             );
 

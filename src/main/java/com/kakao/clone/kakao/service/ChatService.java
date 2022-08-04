@@ -37,6 +37,7 @@ public class ChatService {
                 .orElseThrow(() -> new RuntimeException("채팅방을 찾을 수 없습니다"));
         cr.save(ChatMessage.toChatEntity(message, chatRoom));
     }
+
     @Transactional
     public void sendChat(ChatMessageSaveDTO message) {
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
