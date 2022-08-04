@@ -23,6 +23,7 @@ public class StompHandler implements ChannelInterceptor {
             if(!tokenProvider.validateToken(accessor.getFirstNativeHeader("Authorization")))
                 throw new AccessDeniedException("StompHandler에 들어옴.");
         }*/
+        System.out.println(message);
         return message;
     }
 }

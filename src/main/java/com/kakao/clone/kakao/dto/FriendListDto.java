@@ -1,11 +1,9 @@
 package com.kakao.clone.kakao.dto;
 
-import com.kakao.clone.kakao.model.User;
 import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class FriendListDto {
@@ -14,11 +12,11 @@ public class FriendListDto {
     private String userStatus;
     private String nickname;
 
-    public FriendListDto (User user)
+    public FriendListDto (String friendName,String profileImage, String userStatus, String nickname)
     {
-        this.nickname = user.getNickname();
-        this.username = user.getUsername();
-        this.profileImage = user.getProfileImage();
-        this.userStatus = user.getUserStatus();
+        this.nickname = nickname;
+        this.username = friendName;
+        this.profileImage = profileImage;
+        this.userStatus = userStatus;
     }
 }
