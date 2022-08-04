@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+        web.ignoring().antMatchers("/stomp/**");
 
         System.out.println("stomp");
     }
@@ -60,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 // api 요청 접근허용
-                .antMatchers("/stomp/**").permitAll()
+//                .antMatchers("/stomp/**").permitAll()
                 .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("**").permitAll()
