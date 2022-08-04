@@ -7,7 +7,6 @@ import com.kakao.clone.kakao.model.Friend;
 import com.kakao.clone.kakao.model.User;
 import com.kakao.clone.kakao.repository.UserRepository;
 
-import com.kakao.clone.kakao.repository.FriendRepository;
 import com.kakao.clone.kakao.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor //생성자 미리 생성.
 public class FriendService {
     private final UserRepository userRepository;
-    private final FriendRepository friendRepository;
     public FriendResponseDto showFriendList(UserDetailsImpl userDetails) {
         //로그인 유저 정보.
         User userTemp = userRepository.findById(userDetails.getUser().getId())
