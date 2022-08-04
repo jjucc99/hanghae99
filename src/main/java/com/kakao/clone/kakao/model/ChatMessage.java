@@ -31,12 +31,9 @@ public class ChatMessage {
 
     public static ChatMessage toChatEntity(ChatMessageSaveDTO chatMessageSaveDTO, ChatRoom chatRoomEntity){
         ChatMessage chatMessageEntity = new ChatMessage();
-
         chatMessageEntity.setChatRoom(chatRoomEntity);
-
         chatMessageEntity.setWriter(chatMessageSaveDTO.getWriter());
         chatMessageEntity.setMessage(chatMessageSaveDTO.getMessage());
-
         return chatMessageEntity;
     }
 }

@@ -1,16 +1,21 @@
 package com.kakao.clone.kakao.controller;
 
+import com.kakao.clone.kakao.dto.ChatMessageDto;
 import com.kakao.clone.kakao.dto.ChatMessageSaveDTO;
 import com.kakao.clone.kakao.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class StompChatController {
     private final ChatService cs;
 
@@ -18,17 +23,17 @@ public class StompChatController {
     //stompConfig 에서 설정한 applicationDestinationPrefixes 와 @MessageMapping 경로가 병합됨
     //"/pub/chat/enter"
     @MessageMapping("/chat/enter")
-    public String enter(ChatMessageSaveDTO message) {
-        System.out.println("/chat/enter");
-        cs.enterChatRoom(message);
-        return "나집에갈래.";
+    public ChatMessageDto enter(@Payload ChatMessageSaveDTO message,
+                                @Header("Authorization") String jwt) {
+        log.info("메시지 들어 왔니?");
+        return cs.enterChatRoom(message);
     }
 
     @MessageMapping("/chat/message")
-    public String message(ChatMessageSaveDTO message) {
-        System.out.println("/chat/message");
-        cs.sendChat(message);
-        return "살려줘";
+    public ChatMessageDto message(@Payload ChatMessageSaveDTO message,
+                                  @Header("Authorization") String jwt) {
+        log.info("메시지 들어 왔니?");
+        return  cs.sendChat(message);
     }
 
 //    @MessageMapping 을 통해 WebSocket 으로 들어오는 메세지 발행을 처리한다.
